@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="vip.openpark.read.write.mapper.PersonDOMapper">
+  <resultMap id="BaseResultMap" type="vip.openpark.read.write.domain.PersonDO">
+    <!--
+      WARNING - @mbg.generated
+    -->
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="real_name" jdbcType="VARCHAR" property="realName" />
+    <result column="birthday" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="sex" jdbcType="TINYINT" property="sex" />
+    <result column="marital_status" jdbcType="TINYINT" property="maritalStatus" />
+    <result column="remark_text" jdbcType="VARCHAR" property="remarkText" />
+    <result column="bl_enable" jdbcType="TINYINT" property="blEnable" />
+    <result column="bl_deleted" jdbcType="TINYINT" property="blDeleted" />
+    <result column="version_number" jdbcType="BIGINT" property="versionNumber" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="creator" jdbcType="VARCHAR" property="creator" />
+    <result column="creator_id" jdbcType="BIGINT" property="creatorId" />
+    <result column="creator_code" jdbcType="VARCHAR" property="creatorCode" />
+    <result column="gmt_modify" jdbcType="TIMESTAMP" property="gmtModify" />
+    <result column="modifier" jdbcType="VARCHAR" property="modifier" />
+    <result column="modifier_id" jdbcType="BIGINT" property="modifierId" />
+    <result column="modifier_code" jdbcType="VARCHAR" property="modifierCode" />
+  </resultMap>
+</mapper>
