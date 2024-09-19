@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.jdbc.Sql;
 import vip.openpark.read.write.domain.PersonDO;
 
 /**
@@ -19,18 +20,25 @@ public class PersonDOMapperTest {
 	private PersonDOMapper personDOMapper;
 
 	@Test
-	public void insertTest(){
+	@Sql(statements = {"DELETE FROM person WHERE id = 1"})
+	public void insertTest() {
 		PersonDO personDO = new PersonDO();
+		personDO.setId(1L);
 		personDO.setRealName("anthony");
 
-		int affectedRows = personDOMapper.insert(personDO);
+		int affectedRows = personDOMapper.insertSelective(personDO);
 		log.info("affectedRows: {}", affectedRows);
 		Assertions.assertEquals(1, affectedRows, "插入失败");
 	}
 
 	@Test
-	public void selectByPrimaryKeyTest(){
-		PersonDO personDO = personDOMapper.selectByPrimaryKey(1L);
-		log.info("personDO: {}", personDO);
+	@Sql(statements = {"INSERT INTO person (id, real_name) VALUES (1, 'anthony') ON DUPLICATE KEY UPDATE real_name = VALUES(real_name);"})
+	public void selectByPrimaryKeyTest() {
+		// 模拟多次请求，读取数据是否进行负载均衡
+		for (int i = 0; i < 5; i++) {
+			PersonDO personDO = personDOMapper.selectByPrimaryKey(1L);
+			log.info("personDO: {}", personDO);
+			Assertions.assertEquals("anthony", personDO.getRealName(), "查询失败");
+		}
 	}
 }
