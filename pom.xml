@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>read-write-separation</module>
+        <module>quick-start</module>
     </modules>
 
     <properties>

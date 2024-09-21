@@ -1,0 +1,33 @@
+# 模式配置：https://shardingsphere.apache.org/document/current/cn/user-manual/shardingsphere-jdbc/yaml-config/mode/
+mode:
+  type: Standalone
+  repository:
+    type: JDBC
+# 数据源配置：https://shardingsphere.apache.org/document/current/cn/user-manual/shardingsphere-jdbc/yaml-config/data-source/
+dataSources:
+  person_ds:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://192.168.0.105:3306/sharding_sphere_learn?useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  role_ds:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://192.168.0.105:3307/sharding_sphere_learn?useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+# 规则配置：https://shardingsphere.apache.org/document/current/cn/user-manual/shardingsphere-jdbc/yaml-config/rules/
+rules:
+  # 数据分片规则：https://shardingsphere.apache.org/document/current/cn/user-manual/shardingsphere-jdbc/yaml-config/rules/sharding/
+  - !SHARDING
+    tables:
+      # 自定义逻辑表
+      person:
+        # 逻辑库.实际的表
+        actualDataNodes: person_ds.person
+      role:
+        actualDataNodes: role_ds.role
+# https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/props/
+props:
+  sql-show: true
