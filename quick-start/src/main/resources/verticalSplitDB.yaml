@@ -22,11 +22,13 @@ rules:
   # 数据分片规则：https://shardingsphere.apache.org/document/current/cn/user-manual/shardingsphere-jdbc/yaml-config/rules/sharding/
   - !SHARDING
     tables:
-      # 自定义逻辑表
+      # 自定义逻辑表，需要和 mybatis @Table(name = "person") 保持一致
       person:
         # 逻辑库.实际的表
         actualDataNodes: person_ds.person
+      # 自定义逻辑表，需要和 mybatis @Table(name = "role") 保持一致
       role:
+        # 逻辑库.实际的表
         actualDataNodes: role_ds.role
 # https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/props/
 props:
