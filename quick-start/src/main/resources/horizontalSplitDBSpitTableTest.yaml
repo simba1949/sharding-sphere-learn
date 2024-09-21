@@ -1,0 +1,62 @@
+# 模式配置：https://shardingsphere.apache.org/document/current/cn/user-manual/shardingsphere-jdbc/yaml-config/mode/
+mode:
+  type: Standalone
+  repository:
+    type: JDBC
+# 数据源配置：https://shardingsphere.apache.org/document/current/cn/user-manual/shardingsphere-jdbc/yaml-config/data-source/
+dataSources:
+  master_ds_0:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://192.168.0.105:3307/sharding_sphere_learn?useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  master_ds_1:
+    dataSourceClassName: com.zaxxer.hikari.HikariDataSource
+    driverClassName: com.mysql.cj.jdbc.Driver
+    jdbcUrl: jdbc:mysql://192.168.0.105:3308/sharding_sphere_learn?useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+
+# 规则配置：https://shardingsphere.apache.org/document/current/cn/user-manual/shardingsphere-jdbc/yaml-config/rules/
+rules:
+  # 数据分片规则：https://shardingsphere.apache.org/document/current/cn/user-manual/shardingsphere-jdbc/yaml-config/rules/sharding/
+  - !SHARDING
+    tables:
+      # 自定义逻辑表，需要和 mybatis @Table(name = "person") 保持一致
+      person:
+        # 逻辑库.实际的表
+        actualDataNodes: master_ds_${0..1}.person_${0..1}
+        # 分库策略
+        databaseStrategy:
+          standard:
+            # 分片列名称
+            shardingColumn: sex
+            # 分片算法名称（和下面自定义名称保持一致）
+            shardingAlgorithmName: database_inline
+        # 分表策略
+        tableStrategy:
+          standard:
+            # 分片列名称
+            shardingColumn: id
+            # 分片算法名称（和下面自定义名称保持一致）
+            shardingAlgorithmName: table_inline
+    # 默认分库策略
+    defaultDatabaseStrategy:
+      standard:
+        shardingColumn: user_id
+        shardingAlgorithmName: database_inline
+    shardingAlgorithms:
+      # 分库算法名称
+      database_inline:
+        type: INLINE
+        props:
+          algorithm-expression: master_ds_${sex % 2}
+      # 分表算法名称
+      table_inline:
+        type: INLINE
+        props:
+          algorithm-expression: person_${id % 2}
+# https://shardingsphere.apache.org/document/current/cn/user-manual/common-config/props/
+props:
+  sql-show: true
